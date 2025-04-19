@@ -1,0 +1,55 @@
+{
+    "market_env": {
+        "name": "default_env",
+        "pricing_date": "2025-03-17",
+        "volatility_regime": "base",
+        "calendar": "UnitedStates/NYSE",
+        "day_count": "Actual365Fixed"
+    },
+
+    "volatility_surfaces": {
+        "base": {
+            "type": "flat",
+            "vol": 0.25
+        },
+        "low_vol": {
+            "type": "flat",
+            "vol": 0.15
+        },
+        "high_vol": {
+            "type": "flat",
+            "vol": 0.25
+        }
+    },
+
+    "option_instrument": {
+        "option_type": "call",
+        "strike": 100.0,
+        "expiry": "2025-06-20",
+        "style": "american"
+    },
+
+    "pricer": {
+        "spot": 100.0,
+        "r": 0.02,
+        "q": 0.00,
+        "engine": "binomial",
+        "steps": 100,
+        "bid_ask_spread": 0.1,
+        "model": "bsm",
+        "greek_method": "finite_difference",
+        "fd_bumps": {
+            "bump_spot": 0.01,
+            "bump_vol": 0.01,
+            "bump_rate": 0.0001,
+            "bump_days": 1
+        },
+        "heston_params": {
+            "v0": 0.04,
+            "kappa": 1.5,
+            "theta": 0.04,
+            "sigma": 0.3,
+            "rho": -0.7
+        }
+    }
+}
