@@ -3,6 +3,7 @@ import QuantLib as ql
 from src.environment.conventions import Conventions
 from src.environment.underlying import Underlying
 from src.environment.volatility import VolatilitySurfaceFactory
+from src.environment.yield_curves import YieldCurveBuilder
 
 from src.utils.config_loader import load_config
 
@@ -14,14 +15,16 @@ class MarketEnvironment:
         day_count: ql.DayCounter,
         underlying: Underlying,
         vol_surface: ql.BlackVolTermStructure,
-        # yield_curves: ...
+        risk_free_curve: ql.YieldTermStructure,
+        dividend_curve: ql.YieldTermStructure
     ):
         self.pricing_date = pricing_date
         self.calendar = calendar
         self.day_count = day_count
         self.underlying = underlying
         self.vol_surface = vol_surface
-        # self.yield_curves = yield_curves
+        self.risk_free_cruve = risk_free_curve
+        self.dividend_curve = dividend_curve
 
         ql.Settings.instance().evaluationDate = self.pricing_date
 
@@ -44,15 +47,17 @@ class MarketEnvironment:
             day_count=day_count
         )
 
-        # TODO: Yield Curves
-        
+        curve_builder = YieldCurveBuilder(cfg.curves, pricing_date, calendar, day_count)
+        risk_free_curve, dividend_curve = curve_builder.build_all()
 
         return cls(
             pricing_date=pricing_date,
             calendar=calendar,
             day_count=day_count,
             underlying=underlying,
-            vol_surface=vol_surface
+            vol_surface=vol_surface,
+            risk_free_curve=risk_free_curve,
+            dividend_curve=dividend_curve
         )
 
 
@@ -61,3 +66,4 @@ if __name__ == "__main__":
     market_env = MarketEnvironment.from_config(cfg)
     print("Spot:", market_env.underlying.spot)
     print("Vol Surface:", market_env.vol_surface)
+    print(market_env.dividend_curve)
