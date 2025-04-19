@@ -56,7 +56,7 @@ class VolatilitySurfaceFactory:
 if __name__ == "__main__":
     cfg = load_config()
 
-    pricig_date = ql.DateParser.parseISO(cfg.market_env.pricing_date)
+    pricing_date = ql.DateParser.parseISO(cfg.market_env.pricing_date)
 
     conv = Conventions.from_config(cfg.market_env)
     calendar, day_count = conv.build()
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     vol_surface = VolatilitySurfaceFactory.from_config(vol_surface_config)
 
     ql_vol = vol_surface.build(
-        pricing_date=pricig_date,
+        pricing_date=pricing_date,
         calendar=calendar,
         day_count=day_count
     )
