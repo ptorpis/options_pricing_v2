@@ -31,20 +31,22 @@ class EngineFactory:
         # Create the corresponding pricing engine based on model type
         if isinstance(model, BlackScholesModel):
             if engine_type == "binomial":
-                return BinomialEngine(model.build(), steps)
+                engine = BinomialEngine(model.build(), steps)
             elif engine_type == "analytic":
-                return AnalyticEuropeanEngine(model.build())
+                engine =  AnalyticEuropeanEngine(model.build())
             else:
                 raise ValueError(f"Unknown engine type for Black-Scholes: {engine_type}")
         
         elif isinstance(model, HestonModel):
             if engine_type == "heston":
-                return HestonEngine(model.build())
+                engine = HestonEngine(model.build())
             else:
                 raise ValueError(f"Unknown engine type for Heston model: {engine_type}")
         
         else:
             raise ValueError("Engine not supported for this model type.")
+        
+        return engine.build()
 
 
 if __name__ == "__main__":
