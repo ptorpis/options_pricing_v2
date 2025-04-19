@@ -28,7 +28,12 @@ class FlatVolSurface(VolatilitySurface):
         self.vol = vol
 
     
-    def build(self, pricing_date, calendar, day_count):
+    def build(
+        self,
+        pricing_date: ql.Date,
+        calendar: ql.Calendar,
+        day_count: ql.DayCounter
+    ):
         return ql.BlackConstantVol(pricing_date, calendar, self.vol, day_count)
     
 

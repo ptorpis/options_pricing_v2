@@ -63,7 +63,9 @@ class OptionInstrument:
         option = self.build_option()
 
         if not self.engine:
-            raise ValueError("No pricing engine set. Pass it during init or set `self.engine` before calling price().")
+            raise ValueError(
+                "No pricing engine set. Pass it during init or set `self.engine` before calling price()."
+            )
 
         option.setPricingEngine(self.engine)
 
@@ -83,7 +85,7 @@ class OptionInstrument:
 
 if __name__ == "__main__":
     cfg = load_config()
-    ql.Settings.instance().evaluationDate = ql.DateParser.parseISO(cfg.market_env.pricing_date)
+    #ql.Settings.instance().evaluationDate = ql.DateParser.parseISO(cfg.market_env.pricing_date)
     model_type = cfg.pricer.model
     spot = cfg.underlying.spot
     pricing_date = ql.DateParser.parseISO(cfg.market_env.pricing_date)
@@ -105,7 +107,7 @@ if __name__ == "__main__":
     engine_type = cfg.pricer.engine
     model = ModelFactory.create_model(model_type, spot, dividend_curve, risk_free_curve, ql_vol)
     engine = EngineFactory.create_engine(model, engine_type, steps=100)
-    print(type(engine))
+    
     expiry_date = ql.DateParser.parseISO(cfg.option_instrument.expiry)
     
     option_cfg = cfg.option_instrument
@@ -120,4 +122,4 @@ if __name__ == "__main__":
     ql_option = option.build_option()
     price = option.price()
     print(price)
-    print(ql_option)
+    

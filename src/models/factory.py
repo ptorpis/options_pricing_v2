@@ -1,33 +1,42 @@
+import QuantLib as ql
+
 from src.models.black_scholes import BlackScholesModel
 from src.models.heston import HestonModel
-
 from src.engine.engines import BinomialEngine, AnalyticEuropeanEngine, HestonEngine
 
 from src.utils.config_loader import load_config
 
-import QuantLib as ql
 from src.environment.conventions import Conventions
 from src.environment.yield_curves import YieldCurveBuilder
 from src.environment.volatility import VolatilitySurfaceFactory
 
+
 class ModelFactory:
     @staticmethod
-    def create_model(model_type, spot, dividend_curve, risk_free_curve, vol_surface=None, heston_params=None):
+    def create_model(
+        model_type: str,
+        spot: float,
+        dividend_curve: ql.YieldTermStructure,
+        risk_free_curve: ql.YieldTermStructure,
+        vol_surface=None, # ql.VolSurface, depending on the regime
+        heston_params=None # HestonParams from config
+    ):
+        
         if model_type == "bsm":
-            # Black-Scholes Model
             return BlackScholesModel(spot, dividend_curve, risk_free_curve, vol_surface)
-        
         elif model_type == "heston":
-            # Heston Model
             return HestonModel(spot, risk_free_curve, dividend_curve, heston_params)
-        
         else:
             raise ValueError(f"Unknown model type: {model_type}")
 
 
 class EngineFactory:
     @staticmethod
-    def create_engine(model, engine_type, steps=100):
+    def create_engine(
+        model, # ql.BlackScholesModel or ql.HestonModel
+        engine_type, # From config
+        steps=100
+    ):
         # Create the corresponding pricing engine based on model type
         if isinstance(model, BlackScholesModel):
             if engine_type == "binomial":

@@ -9,7 +9,11 @@ class PricingEngine:
 
 
 class BinomialEngine(PricingEngine):
-    def __init__(self, model_process, steps=100):
+    def __init__(
+            self,
+            model_process: ql.BlackScholesMertonProcess,
+            steps=100
+        ):
         super().__init__(model_process)
         self.steps = steps
 
@@ -19,7 +23,10 @@ class BinomialEngine(PricingEngine):
 
 
 class AnalyticEuropeanEngine(PricingEngine):
-    def __init__(self, model_process):
+    def __init__(
+            self,
+            model_process: ql.BlackScholesMertonProcess
+        ):
         super().__init__(model_process)
 
     def build(self):
@@ -28,7 +35,10 @@ class AnalyticEuropeanEngine(PricingEngine):
 
 
 class HestonEngine(PricingEngine):
-    def __init__(self, model_process):
+    def __init__(
+            self,
+            model_process: ql.HestonModel
+        ):
         super().__init__(model_process)
 
     def build(self):

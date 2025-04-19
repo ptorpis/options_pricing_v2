@@ -5,10 +5,10 @@ from src.models.base import AbstractModel
 class BlackScholesModel(AbstractModel):
     def __init__(
             self,
-            spot,
-            dividend_curve,
-            risk_free_curve,
-            vol_surface
+            spot: float,
+            dividend_curve: ql.YieldTermStructure,
+            risk_free_curve: ql.YieldTermStructure,
+            vol_surface # ql.VolatilitySurface depending on regime
         ):
         super().__init__()
 

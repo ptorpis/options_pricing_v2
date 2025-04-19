@@ -2,7 +2,14 @@ import QuantLib as ql
 from src.models.base import AbstractModel
 
 class HestonModel(AbstractModel):
-    def __init__(self, spot, risk_free_curve, dividend_curve, heston_params):
+    def __init__(
+            self,
+            spot: float,
+            risk_free_curve: ql.YieldTermStructure,
+            dividend_curve: ql.YieldTermStructure,
+            heston_params # from config
+        ):
+        
         self.spot = spot
         self.risk_free_curve = risk_free_curve
         self.dividend_curve = dividend_curve
