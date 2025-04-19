@@ -1,15 +1,11 @@
 import json
 import os
-from re import L
-from textwrap import indent
+from pydantic import BaseModel, ValidationError
 
-from pydantic import BaseModel, Field, ValidationError
 
-from src.engine import pricer
-
+# === Individual Config Models === #
 
 class MarketEnvConfig(BaseModel):
-    name: str
     pricing_date: str
     volatility_regime: str
     calendar: str
@@ -28,6 +24,21 @@ class OptionInstrumentConfig(BaseModel):
     style: str
 
 
+class UnderlyingConfig(BaseModel):
+    name: str
+    spot: float
+
+
+class FlatCurveConfig(BaseModel):
+    type: str  # currently only supports "flat"
+    rate: float
+
+
+class CurvesConfig(BaseModel):
+    risk_free: FlatCurveConfig
+    dividend: FlatCurveConfig
+
+
 class FDBumps(BaseModel):
     bump_spot: float
     bump_vol: float
@@ -44,9 +55,6 @@ class HestonParams(BaseModel):
 
 
 class PricerConfig(BaseModel):
-    spot: float
-    r: float
-    q: float
     engine: str
     steps: int
     bid_ask_spread: float
@@ -56,12 +64,18 @@ class PricerConfig(BaseModel):
     heston_params: HestonParams
 
 
+# === Top-Level Config Model === #
+
 class FullConfig(BaseModel):
     market_env: MarketEnvConfig
+    underlying: UnderlyingConfig
+    curves: CurvesConfig
     volatility_surfaces: dict[str, VolSurfaceConfig]
     option_instrument: OptionInstrumentConfig
     pricer: PricerConfig
 
+
+# === Loader Function === #
 
 def load_config(path="config/config.json") -> FullConfig: 
     if not os.path.exists(path):
@@ -73,14 +87,14 @@ def load_config(path="config/config.json") -> FullConfig:
     try:
         config = FullConfig(**raw_config)
     except ValidationError as e:
-        print('Config Validation failedL')
+        print('Config validation failed:')
         print(e.json())
         raise e
     
     return config
 
 
-
+# === Debug Entry Point === #
 
 if __name__ == "__main__":
     cfg = load_config()

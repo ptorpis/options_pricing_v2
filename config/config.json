@@ -1,10 +1,26 @@
 {
     "market_env": {
-        "name": "default_env",
         "pricing_date": "2025-03-17",
         "volatility_regime": "base",
         "calendar": "UnitedStates/NYSE",
         "day_count": "Actual365Fixed"
+    },
+
+    "underlying": {
+        "name": "default_env",
+        "spot": 100.0
+    },
+
+    "curves": {
+        "risk_free": {
+            "type": "flat",
+            "rate": 0.02
+        },
+        "dividend":{
+            "type": "flat",
+            "rate": 0.00
+        }
+
     },
 
     "volatility_surfaces": {
@@ -30,20 +46,19 @@
     },
 
     "pricer": {
-        "spot": 100.0,
-        "r": 0.02,
-        "q": 0.00,
         "engine": "binomial",
         "steps": 100,
         "bid_ask_spread": 0.1,
         "model": "bsm",
         "greek_method": "finite_difference",
+    
         "fd_bumps": {
             "bump_spot": 0.01,
             "bump_vol": 0.01,
             "bump_rate": 0.0001,
             "bump_days": 1
         },
+        
         "heston_params": {
             "v0": 0.04,
             "kappa": 1.5,
