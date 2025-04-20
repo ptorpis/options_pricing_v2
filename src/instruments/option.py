@@ -41,7 +41,7 @@ class OptionInstrument:
         if self.option_type == "call":
             return ql.PlainVanillaPayoff(ql.Option.Call, self.strike)
         elif self.option_type == "put":
-            return ql.PlainVanillaPayoff(ql.Option.put, self.strike)
+            return ql.PlainVanillaPayoff(ql.Option.Put, self.strike)
         else:
             raise ValueError(f'Unknown option type: {self.option_type}')
         
@@ -56,11 +56,12 @@ class OptionInstrument:
             raise ValueError(f"Unknown option style: {self.style}")
         
     
-    def build_option(self) -> ql.VanillaOption:
+    def _build_option(self) -> ql.VanillaOption:
         return ql.VanillaOption(self.payoff(), self.exercise())
     
+
     def price(self) -> dict:
-        option = self.build_option()
+        option = self._build_option()
 
         if not self.engine:
             raise ValueError(

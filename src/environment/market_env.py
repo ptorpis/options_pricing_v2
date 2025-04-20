@@ -23,7 +23,7 @@ class MarketEnvironment:
         self.day_count = day_count
         self.underlying = underlying
         self.vol_surface = vol_surface
-        self.risk_free_cruve = risk_free_curve
+        self.risk_free_curve = risk_free_curve
         self.dividend_curve = dividend_curve
 
         ql.Settings.instance().evaluationDate = self.pricing_date
