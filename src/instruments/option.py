@@ -65,4 +65,13 @@ class OptionInstrument:
             "bid": bid,
             "ask": ask
         }
+    
+    
+    def __repr__(self):
+        return (f"OptionInstrument(type={self.option_type}, "
+                f"style={self.style}, "
+                f"strike={self.strike}, "
+                f"expiry={self.expiry}, "
+                f"spread={self.bid_ask_spread})")
+
    

@@ -1,6 +1,6 @@
 import QuantLib as ql
 
-from src.utils.config_loader import load_config
+from src.utils.config_loader import load_config, FullConfig
 from src.environment.market_env import MarketEnvironment
 from src.models.factory import ModelFactory, EngineFactory
 from src.instruments.option import OptionInstrument
@@ -8,17 +8,17 @@ from src.instruments.option import OptionInstrument
 
 class PricingInterface:
     def __init__(self):
-        self.cfg = load_config()
+        self.cfg: FullConfig = load_config()
 
         self.expiry_date = ql.DateParser.parseISO(self.cfg.option_instrument.expiry)
 
-        self._market_env = MarketEnvironment.from_config(self.cfg)
+        self.market_env = MarketEnvironment.from_config(self.cfg)
         self._model = ModelFactory.create_model(
             self.cfg.pricer.model,
-            self._market_env.underlying.spot,
-            self._market_env.dividend_curve,
-            self._market_env.risk_free_curve,
-            self._market_env.vol_surface,
+            self.market_env.underlying.spot,
+            self.market_env.dividend_curve,
+            self.market_env.risk_free_curve,
+            self.market_env.vol_surface,
             self.cfg.pricer.heston_params
         )
         self._engine = EngineFactory.create_engine(
@@ -26,7 +26,7 @@ class PricingInterface:
             self.cfg.pricer.engine,
             steps=100
         )
-        self._option = OptionInstrument(
+        self.option = OptionInstrument(
             self.cfg.option_instrument.option_type,
             self.cfg.option_instrument.strike,
             self.expiry_date,
@@ -37,4 +37,4 @@ class PricingInterface:
 
     
     def price(self):
-        return self._option.price()
+        return self.option.price()
