@@ -1,28 +1,35 @@
 # OPTIONS PRICING ENGINE 
-Options Pricing Engine based on QuantLib with an API.
+Options Pricing Engine based on QuantLib.
+# Dependencies
+To install dependencies (QuantLib and pydantic), run:
+```bash
+pip install -r requirements.txt
+```
+# Usage
 
-# Architecture
+Set up the config by running `setup.py`:
+
+```bash
+python setup.py
+```
+
+To reset config:
+```bash
+python setup.py --reset
+```
+Then, configure the market and contract parameters in `config/config,json`
+
+To get the price of the options contract:
+```bash
+python main.py
+```
+
+Get a summary of the contract and the market environment, use `--summary`:
+```bash
+python main.py --summary
+```
+# Architecture (documentation to be added)
 The goal for this project is to create a nuanced and configurable options pricing engine with the ability to set up the underlying market environment with different volatility term structures and yield curves.
 
 This gives the user the ability to run a lot of different simulations based on their assumptions.
-# High Level Wrappers
-## `MarketEnvironment`
-This class ties all of the underlying market factors into one and builds the environment.
-This includes spot (underlying) price, forward price, dividend yield, risk-free and dividend yield term structure, volatility surfaces, calendar and market conventions.
 
-### `UnderlyingMarket`
-Manage spot price, forward price, dividend yield
-### `YieldCurveBuilder`
-Constructs risk-free and dividend yield term strucutures.
-### `VolatilitySurface`
-Build flat, smile, or full volatility surface.
-### `MarketConventions`
-Wraps up the market calendar, settlement, day count and business day conventions.
-## `OptionInstrument`
-Describes the option contract - type, exercise style, strike, expiration.
-
-## `OptionPricer`
-Uses the environment and instrument to build a process and price the contract.
-
-## `PricingAPI`
-High-level interface for loading config and calling pricing methods.
