@@ -2,9 +2,6 @@ from abc import ABC, abstractmethod
 
 import QuantLib as ql
 
-from src.environment.conventions import Conventions
-from src.utils.config_loader import load_config
-
 
 class VolatilitySurface(ABC):
     @abstractmethod
@@ -57,25 +54,3 @@ class VolatilitySurfaceFactory:
         else:
             raise ValueError(f"Unknown vol surface type: {surface_type}")
 
-
-if __name__ == "__main__":
-    cfg = load_config()
-
-    pricing_date = ql.DateParser.parseISO(cfg.market_env.pricing_date)
-
-    conv = Conventions.from_config(cfg.market_env)
-    calendar, day_count = conv.build()
-
-    vol_regime = cfg.market_env.volatility_regime
-    vol_surface_config = cfg.volatility_surfaces[vol_regime]
-
-    vol_surface = VolatilitySurfaceFactory.from_config(vol_surface_config)
-
-    ql_vol = vol_surface.build(
-        pricing_date=pricing_date,
-        calendar=calendar,
-        day_count=day_count
-    )
-
-    print(f"QL Volatility Surface: {ql_vol}")
-    print(f"Vol at T=1, K=100: {ql_vol.blackVol(1.0, 100)}")

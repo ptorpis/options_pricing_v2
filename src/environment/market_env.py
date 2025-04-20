@@ -5,7 +5,6 @@ from src.environment.underlying import Underlying
 from src.environment.volatility import VolatilitySurfaceFactory
 from src.environment.yield_curves import YieldCurveBuilder
 
-from src.utils.config_loader import load_config
 
 class MarketEnvironment:
     def __init__(
@@ -59,11 +58,3 @@ class MarketEnvironment:
             risk_free_curve=risk_free_curve,
             dividend_curve=dividend_curve
         )
-
-
-if __name__ == "__main__":
-    cfg = load_config()
-    market_env = MarketEnvironment.from_config(cfg)
-    print("Spot:", market_env.underlying.spot)
-    print("Vol Surface:", market_env.vol_surface)
-    print(market_env.dividend_curve)

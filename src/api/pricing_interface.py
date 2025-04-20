@@ -38,9 +38,3 @@ class PricingInterface:
     
     def price(self):
         return self._option.price()
-    
-
-
-if __name__ == "__main__":
-    interface = PricingInterface()
-    print(interface.price())

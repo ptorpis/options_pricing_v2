@@ -4,12 +4,6 @@ from src.models.black_scholes import BlackScholesModel
 from src.models.heston import HestonModel
 from src.engine.engines import BinomialEngine, AnalyticEuropeanEngine, HestonEngine
 
-from src.utils.config_loader import load_config
-
-from src.environment.conventions import Conventions
-from src.environment.yield_curves import YieldCurveBuilder
-from src.environment.volatility import VolatilitySurfaceFactory
-
 
 class ModelFactory:
     @staticmethod
@@ -57,35 +51,4 @@ class EngineFactory:
         
         return engine.build()
 
-
-if __name__ == "__main__":
-    cfg = load_config()
-    model_type = cfg.pricer.model
-    spot = cfg.underlying.spot
-    pricing_date = ql.DateParser.parseISO(cfg.market_env.pricing_date)
-    calendar, day_count = Conventions.from_config(cfg.market_env).build()
-
-    curves_builder = YieldCurveBuilder(cfg.curves, pricing_date, calendar, day_count)
-
-    risk_free_curve, dividend_curve = curves_builder.build_all()
-    vol_regime = cfg.market_env.volatility_regime
-    vol_surface_config = cfg.volatility_surfaces[vol_regime]
-
-    vol_surface = VolatilitySurfaceFactory.from_config(vol_surface_config)
-
-    ql_vol = vol_surface.build(
-        pricing_date=pricing_date,
-        calendar=calendar,
-        day_count=day_count
-    )
-
-    heston_params = cfg.pricer.heston_params
-
-    model = ModelFactory.create_model(model_type, spot, dividend_curve, risk_free_curve, ql_vol, heston_params)
-    # Create Engine
-    engine = EngineFactory.create_engine(model, cfg.pricer.engine, steps=100)
-
-    # Use the engine for pricing
-    pricing_results = engine.price()
-    print(pricing_results)
    

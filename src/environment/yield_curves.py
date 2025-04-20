@@ -1,8 +1,5 @@
 import QuantLib as ql
 
-from src.utils.config_loader import load_config
-
-from src.environment.conventions import Conventions
 
 class YieldCurveBuilder:
     def __init__(
@@ -35,17 +32,3 @@ class YieldCurveBuilder:
 
         return risk_free_curve, dividend_curve
     
-
-if __name__ == "__main__":
-
-    cfg = load_config()
-
-    pricing_date = ql.DateParser.parseISO(cfg.market_env.pricing_date)
-    calendar, day_count = Conventions.from_config(cfg.market_env).build()
-
-    curves_builder = YieldCurveBuilder(cfg.curves, pricing_date, calendar, day_count)
-
-    risk_free_curve, dividend_curve = curves_builder.build_all()
-
-    print(f"Risk-Free Curve: {risk_free_curve}")
-    print(f"Dividend Yield Curve: {dividend_curve}")

@@ -1,5 +1,5 @@
 import QuantLib as ql
-from src.utils.config_loader import load_config
+
 
 class Conventions():
     def __init__(self, calendar_name: str, day_count: str):
@@ -42,12 +42,3 @@ class Conventions():
             calendar_name=cfg.calendar,
             day_count=cfg.day_count
         )
-    
-
-if __name__ == "__main__":
-    cfg = load_config()
-
-    conventions = Conventions.from_config(cfg.market_env)
-    calendar, dc = conventions.build()
-
-    print(calendar, dc)
