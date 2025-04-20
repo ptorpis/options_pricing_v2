@@ -7,7 +7,23 @@ from src.instruments.option import OptionInstrument
 
 
 class PricingInterface:
+    """
+    The main interface class to configure and price an option instrument.
+
+    This class loads the entire environment and pricing stack from configuration:
+    - Market data (volatility, curves, etc.)
+    - Pricing model (e.g., Black-Scholes, Heston)
+    - Engine (e.g., analytic, binomial, etc.)
+    - Option instrument (call/put, European/American)
+    """
+
+    
     def __init__(self):
+        """
+        Initialize the pricing interface by loading config and constructing
+        all components (market environment, model, engine, and instrument).
+        """
+
         self.cfg: FullConfig = load_config()
 
         self.expiry_date = ql.DateParser.parseISO(self.cfg.option_instrument.expiry)
@@ -36,5 +52,12 @@ class PricingInterface:
         )
 
     
-    def price(self):
+    def price(self) -> dict:
+        """
+        Price the configured option instrument.
+
+        Returns:
+            dict: A dictionary with mid, bid, and ask prices.
+        """
+
         return self.option.price()

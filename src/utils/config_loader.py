@@ -77,7 +77,21 @@ class FullConfig(BaseModel):
 
 # === Loader Function === #
 
-def load_config(path="config/config.json") -> FullConfig: 
+def load_config(path="config/config.json") -> FullConfig:
+    """
+    Load and validate a JSON configuration file.
+
+    Args:
+        path (str): Path to the configuration file. Defaults to "config/config.json".
+
+    Raises:
+        FileNotFoundError: If the configuration file does not exist.
+        ValidationError: If the file contents do not conform to the FullConfig schema.
+
+    Returns:
+        FullConfig: A validated configuration object.
+    """
+    
     if not os.path.exists(path):
         raise FileNotFoundError(f'Config not found at {path}')
     

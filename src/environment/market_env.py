@@ -7,6 +7,32 @@ from src.environment.yield_curves import YieldCurveBuilder
 
 
 class MarketEnvironment:
+    """
+    A class that encapsulates all market-related data required for option pricing.
+
+    This class holds all the necessary market data such as pricing date, calendar,
+    day count convention, underlying asset, volatility surface, risk-free curve,
+    and dividend curve. It also provides a method to build these data structures
+    from a configuration.
+
+    Attributes:
+        pricing_date (ql.Date): The pricing date used for building curves and volatilities.
+        calendar (ql.Calendar): The calendar used for date adjustments.
+        day_count (ql.DayCounter): The day count convention used for interest rate calculations.
+        underlying (Underlying): An object representing the underlying asset (e.g., stock).
+        vol_surface (ql.BlackVolTermStructure): The volatility surface used in option pricing.
+        risk_free_curve (ql.YieldTermStructure): The risk-free yield curve.
+        dividend_curve (ql.YieldTermStructure): The dividend yield curve.
+
+    Methods:
+        from_config(cfg): 
+            Creates a MarketEnvironment instance from the provided configuration.
+
+        __repr__(): 
+            Returns a string representation of the MarketEnvironment object, including key market details.
+    """
+
+
     def __init__(
         self,
         pricing_date: ql.Date,
@@ -17,6 +43,19 @@ class MarketEnvironment:
         risk_free_curve: ql.YieldTermStructure,
         dividend_curve: ql.YieldTermStructure
     ):
+        """
+        Initialize the MarketEnvironment instance with the given market data.
+
+        Args:
+            pricing_date (ql.Date): The pricing date used for constructing the curves.
+            calendar (ql.Calendar): The calendar used for date adjustments.
+            day_count (ql.DayCounter): The day count convention used for curve calculations.
+            underlying (Underlying): The underlying asset.
+            vol_surface (ql.BlackVolTermStructure): The volatility surface to be used.
+            risk_free_curve (ql.YieldTermStructure): The risk-free yield curve.
+            dividend_curve (ql.YieldTermStructure): The dividend yield curve.
+        """
+
         self.pricing_date = pricing_date
         self.calendar = calendar
         self.day_count = day_count
@@ -30,6 +69,20 @@ class MarketEnvironment:
 
     @classmethod
     def from_config(cls, cfg):
+        """
+        Create a MarketEnvironment instance from the given configuration.
+
+        This class method reads the configuration and constructs the market environment
+        by initializing the necessary data structures like the volatility surface, 
+        risk-free curve, and dividend curve based on the configuration.
+
+        Args:
+            cfg (pydantic config object): The configuration dictionary containing market parameters.
+
+        Returns:
+            MarketEnvironment: An instance of the MarketEnvironment class.
+        """
+
         pricing_date = ql.DateParser.parseISO(cfg.market_env.pricing_date)
 
         conventions = Conventions.from_config(cfg.market_env)
