@@ -66,8 +66,9 @@ class MarketEnvironment:
                 f"spot={self.underlying.spot}, "
                 f"rfr={self.risk_free_curve.zeroRate(1.0, ql.Continuous).rate():.4f}, "
                 f"div={self.dividend_curve.zeroRate(1.0, ql.Continuous).rate():.4f}, "
-                f"day_count={self.day_count.name()},"
-                f"calendar={self.calendar})"
+                f"day_count={self.day_count.name()}, "
+                f"calendar={self.calendar}, "
+                f"vol={self.vol_surface.blackVol(1.0, ql.Continuous)})"
             )
 
 
