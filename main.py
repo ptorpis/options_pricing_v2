@@ -1,5 +1,5 @@
 import sys
-from src.api.pricing_interface import PricingInterface
+from pricing_engine.api.pricing_interface import PricingInterface
 
 if __name__ == "__main__":
     interface = PricingInterface()

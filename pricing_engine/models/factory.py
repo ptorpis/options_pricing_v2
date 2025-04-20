@@ -1,8 +1,8 @@
 import QuantLib as ql
 
-from src.models.black_scholes import BlackScholesModel
-from src.models.heston import HestonModel
-from src.engine.engines import BinomialEngine, AnalyticEuropeanEngine, HestonEngine
+from pricing_engine.models.black_scholes import BlackScholesModel
+from pricing_engine.models.heston import HestonModel
+from pricing_engine.engine.engines import BinomialEngine, AnalyticEuropeanEngine, HestonEngine
 
 
 class ModelFactory:

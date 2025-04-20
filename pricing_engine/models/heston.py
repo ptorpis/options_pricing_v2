@@ -1,5 +1,5 @@
 import QuantLib as ql
-from src.models.base import AbstractModel
+from pricing_engine.models.base import AbstractModel
 
 class HestonModel(AbstractModel):
     """

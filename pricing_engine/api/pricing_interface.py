@@ -1,9 +1,9 @@
 import QuantLib as ql
 
-from src.utils.config_loader import load_config, FullConfig
-from src.environment.market_env import MarketEnvironment
-from src.models.factory import ModelFactory, EngineFactory
-from src.instruments.option import OptionInstrument
+from pricing_engine.utils.config_loader import load_config, FullConfig
+from pricing_engine.environment.market_env import MarketEnvironment
+from pricing_engine.models.factory import ModelFactory, EngineFactory
+from pricing_engine.instruments.option import OptionInstrument
 
 
 class PricingInterface:
