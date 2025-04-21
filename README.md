@@ -114,12 +114,13 @@ Creates a MarketEnvironment instance from the provided configuration. This class
 Args:
 cfg (pydantic config object): The configuration dictionary containing market parameters.
 
-At initialization private method `_generate_expiries()` gets called, which generates a list of expiry dates. By default 4 weeklies, 6 months of monthlies and a YTD expiry one.
-
-This can be used as points where IV term structure is defined (not implemented yet).
 
 Returns:
 `MarketEnvironment`: An instance of the MarketEnvironment class.
+
+At initialization private method `_generate_expiries()` gets called, which generates a list of expiry dates. By default 4 weeklies, 6 months of monthlies and a YTD expiry one.
+
+This can be used as points where IV term structure is defined (not implemented yet).
 
 - `__repr__()`: 
 Returns a string representation of the MarketEnvironment object, including key market details.
