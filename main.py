@@ -11,3 +11,7 @@ if __name__ == "__main__":
         print(interface.market_env)
         print("\n--- Option Instrument Summary ---")
         print(interface.option)
+        print(f"\n--- Generated Expiry Dates Based on Configured Pricing Date ({interface.market_env.pricing_date}) ---")
+        
+        for i in range(len(interface.market_env.expiries)):
+            print(interface.market_env.expiries[i])

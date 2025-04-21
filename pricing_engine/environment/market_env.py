@@ -63,6 +63,7 @@ class MarketEnvironment:
         self.vol_surface = vol_surface
         self.risk_free_curve = risk_free_curve
         self.dividend_curve = dividend_curve
+        self.expiries = self._generate_expiries()
 
         ql.Settings.instance().evaluationDate = self.pricing_date
 
@@ -111,6 +112,78 @@ class MarketEnvironment:
             risk_free_curve=risk_free_curve,
             dividend_curve=dividend_curve
         )
+    
+
+    def _get_weekly_expiries(self, n_weeks=4):
+        """
+        Generate weekly expiries, default=4 weeks. These are the expiries on the Fridays
+        (or previous trading day if the Friday is a market holiday)
+        """
+        expiries = []
+        d = self.pricing_date
+        
+        weekday = d.weekday()
+    
+        days_until_friday = ((6 - weekday) % 7)
+
+        friday = d + ql.Period(days_until_friday, ql.Days)
+        friday = self.calendar.adjust(friday, ql.Preceding)
+
+        expiries.append(friday)
+
+        for i in range(n_weeks):
+            friday += ql.Period(1, ql.Weeks)
+            while friday.weekday() != 6:
+                friday += ql.Period(1, ql.Days)
+
+            friday = self.calendar.adjust(friday, ql.Preceding)
+            expiries.append(friday)
+
+        return expiries
+    
+
+    def _get_third_friday_expiries(self, n_months=13):
+        """
+        Long term expiries. Monthly, 6 months, and YTD.
+        """
+        expiries = []
+        d = self.pricing_date
+
+        for i in range(n_months):
+            month_offset = d.month() + i
+            year, month = divmod(month_offset - 1, 12)
+
+            month += 1
+            year = d.year() + year
+            
+            first_day = ql.Date(1, month, year)
+
+            third_friday = first_day + ql.Period(14, ql.Days)
+
+            while third_friday.weekday() != 6:
+                third_friday += ql.Period(1, ql.Days)
+
+            third_friday = self.calendar.adjust(third_friday, ql.Preceding)
+
+            expiries.append(third_friday)
+
+        if d > expiries[0]:
+            expiries.pop(0)
+
+        if len(expiries) > 6:
+            expiries = expiries[:6] + [expiries[-1]]
+
+        return expiries
+            
+
+    def _generate_expiries(self, n_weeklies=4, n_monthlies=13):
+        expiries = []
+
+        expiries += self._get_weekly_expiries(n_weeks=n_weeklies)
+        expiries += self._get_third_friday_expiries(n_months=n_monthlies)
+
+        return sorted(set(list(expiries)))
+
 
     def __repr__(self):
         return (f"MarketEnvironment("
@@ -123,5 +196,3 @@ class MarketEnvironment:
                 f"calendar={self.calendar}, "
                 f"vol={self.vol_surface.blackVol(1.0, ql.Continuous)})"
             )
-
-
