@@ -63,7 +63,7 @@ class Conventions():
         try:
             return calendar_map[name]()
         except KeyError:
-            raise ValueError(f"Unsupported calendar: {name}")
+            raise NotImplementedError(f"Unsupported calendar: {name}")
 
 
     @staticmethod
