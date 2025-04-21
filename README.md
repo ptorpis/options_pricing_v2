@@ -7,7 +7,7 @@ pip install -r requirements.txt
 ```
 # Usage
 
-Set up the config by running `setup.py`:
+Set up the config by running `setup_cfg.py`:
 
 ```bash
 python setup_cfg.py
@@ -42,8 +42,8 @@ The main interface class to configure and price an option instrument.
 This class loads the entire environment and pricing stack from configuration:
 - Market data (volatility, curves, etc.) (public: `interface.market_env`)
 - Option instrument (call/put, European/American) (public: `interface.option`)
-- Pricing model (e.g., Black-Scholes, Heston)
-- Engine (e.g., analytic, binomial, etc.)
+- Pricing model (Black-Scholes, Heston)
+- Engine (analytic, binomial, heston)
 
 ## Engines
 ### `PricingEngine` class:
