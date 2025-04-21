@@ -106,12 +106,17 @@ Attributes:
 - vol_surface (`ql.BlackVolTermStructure`): The volatility surface used in option pricing.
 - risk_free_curve (`ql.YieldTermStructure`): The risk-free yield curve.
 - dividend_curve (`ql.YieldTermStructure`): The dividend yield curve.
+- expiries (`list[ql.Date]`): list of generated, realistic options contract expiries.
 
 Methods:
 - `from_config(cfg: FullConfig)`: 
 Creates a MarketEnvironment instance from the provided configuration. This class method reads the configuration and constructs the market environment by initializing the necessary data structures like the volatility surface, risk-free curve, and dividend curve based on the configuration.
 Args:
 cfg (pydantic config object): The configuration dictionary containing market parameters.
+
+At initialization private method `_generate_expiries()` gets called, which generates a list of expiry dates. By default 4 weeklies, 6 months of monthlies and a YTD expiry one.
+
+This can be used as points where IV term structure is defined (not implemented yet).
 
 Returns:
 `MarketEnvironment`: An instance of the MarketEnvironment class.
