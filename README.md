@@ -28,6 +28,55 @@ Get a summary of the contract and the market environment, use `--summary`:
 ```bash
 python main.py --summary
 ```
+# Configuration
+
+To use this engine, you can edit the config file created by running the config setup.
+You can set:
+
+- Market Environment
+    - `pricing_date`: the date at which the options contract shoudld be priced on. Use `YYYY-MM-DD` format.
+    - `volatility_regime`: select a specific volatility environment (defined in `volatility_surfaces`)
+    - `calendar`: [Conventions](#conventions-class)
+    - `day_count`: [Conventions](#conventions-class)
+
+- Underlying
+    - `name`: name the environemt (can be useful for debugging)
+    - `spot`: spot price of the underlying
+
+- Curves
+    - `risk_free`: configure the risk free curve and the risk free rate (the type currently only supports "flat")
+    - `dividend`: configure the dividend yield curve (the type currently only supports "flat")
+
+- Volatility Surfaces: configure volatility environment profiles (this is what is being chosen in `volatility_regime`, currently only supports "flat")
+    - `base`
+    - `low_vol`
+    - `high_vol`
+
+- Option Instrument: define parameters of the contract being priced
+    - `option_type`: "call" or "put"
+    - `strike`: strike price
+    - `expiry`: expiration date of the contract (`YYYY-MM-DD`)
+    - `style`: "american" or "european"
+
+- Pricer
+    - `engine`: pricing engine used in the calculation
+        - "heston" (only compatible with Heston model)
+        - "binomial" (use this for american options)
+        - "analytic" (use this for european options)
+
+    - `steps`: amount of steps for the binomial model
+    - `bid_ask_spread`
+    - `model`: model used in the calculation
+        - "bsm" for Black-Scholes-Metron model
+        - "heston" for Heston model
+        
+    - `greek_method`: greeks are currently not supported
+
+    - `fd_bumps`: not implemented yet (the bumps used in finite differences greeks estimations)
+    - `heston_params`: parameters used (only relevant when using Heston model)
+
+Note that not all models and engines are compatible.
+
 # Architecture
 The goal for this project is to create a nuanced and configurable options pricing engine with the ability to set up the underlying market environment with different volatility term structures and yield curves.
 
